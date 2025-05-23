@@ -4,9 +4,9 @@ use std::collections::HashMap;
 use crate::catalog::{ItemTrait, ItemDescription};
 
 pub struct ItemA {
-    pub number: u32,
-    pub name: &'static str,
-    pub description: &'static str,
+    number: u32,
+    name: &'static str,
+    description: &'static str,
 }
 
 impl ItemTrait for ItemA {

@@ -1,11 +1,9 @@
 mod catalog;
-use catalog::Catalog;
-use crate::catalog::ItemTrait;
+
 mod items;
-use items::ItemA; 
+use items::build_catalog;
 
 fn main() {
-    let mut catalog = Catalog::new();
-    catalog.register_item(ItemA::new());
-    catalog.execute_all();
+    let item_catalog = build_catalog();    
+    item_catalog.execute_all();
 }
