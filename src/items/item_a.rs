@@ -1,12 +1,13 @@
 
 use std::collections::HashMap;
 
-use crate::catalog::{ItemTrait, ItemDescription};
+use crate::catalog::{ItemTrait, ItemDescription, Priority};
 
 pub struct ItemA {
     number: u32,
     name: &'static str,
     description: &'static str,
+    priority: Priority
 }
 
 impl ItemTrait for ItemA {
@@ -15,6 +16,7 @@ impl ItemTrait for ItemA {
             number: 42,
             name: "ItemA",
             description: "Super Interesting Description",
+            priority: Priority::LEVEL0
         })
     }
 
@@ -22,6 +24,7 @@ impl ItemTrait for ItemA {
         return ItemDescription{
             name: self.name,
             description: self.description,
+            priority: self.priority
         }
     }
 
