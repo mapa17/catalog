@@ -1,3 +1,22 @@
+/*
+Catalog - Keep track of multiple items and execute them by priority in parallel
+
+Catalog is a struct that can be used to register multiple items that each has to implement
+the `ItemTrait` Trait.
+
+A recommended structure looks similar to
+
+src
+ - items
+    - itemA.rs
+    - itemB.rs
+    items.rs
+    catalog.rs
+
+Where in `items.rs` a catalog struct is instantiated and all the item instances are registered.
+
+*/
+
 use std::collections::HashMap;
 use std::thread;
 
@@ -44,10 +63,8 @@ impl Catalog {
         self.items.insert(description.name.to_string(), item);
     }
     
-    pub fn execute_all(&self) -> HashMap<String, String>{
+    pub fn execute(&self, context: &mut HashMap<String, String>){        
         println!("Executing all registered items {}...", self.items.len());
-        let mut context = HashMap::new();
-        // TODO: Execute items in parallel using Rayon
         for current_level in Priority::get_levels() {
             
             // Only select items for current level            
@@ -60,7 +77,7 @@ impl Catalog {
             if items_to_execute.len() > 0 {
                 println!("Executing {} items with level {:?} and context {:?}", items_to_execute.len(), *current_level, context);
                 // Execute every item in its own thead. Collect and join all partial results into a new context.
-                let new_context = thread::scope(|s| {
+                let new_context: HashMap<String, String> = thread::scope(|s| {
                     items_to_execute
                         .iter()
                         .map(|(_, item)| {
@@ -71,10 +88,9 @@ impl Catalog {
                         .collect()
                 });
 
-                context = new_context;            
+                context.extend(new_context);
             }
         }
         println!("Final result {context:?}");
-        return context;
     }
 }
